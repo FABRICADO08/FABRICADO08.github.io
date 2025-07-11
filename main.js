@@ -2,13 +2,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- PASTE YOUR FIREBASE CONFIGURATION OBJECT HERE ---
     const firebaseConfig = {
-        apiKey: "AIza...",
-        authDomain: "your-project-id.firebaseapp.com",
-        projectId: "your-project-id",
-        storageBucket: "your-project-id.appspot.com",
-        messagingSenderId: "...",
-        appId: "1:..."
-    };
+  apiKey: "AIzaSyCgc8xXVs1_DNhKMoUx0kiZnzoL8nIsStM",
+  authDomain: "mentorship-5ce42.firebaseapp.com",
+  projectId: "mentorship-5ce42",
+  storageBucket: "mentorship-5ce42.firebasestorage.app",
+  messagingSenderId: "764728773969",
+  appId: "1:764728773969:web:1ade331d0ce736efe19770",
+  measurementId: "G-PDKKVLP6L6"
+};
 
     // --- INITIALIZE FIREBASE ---
     firebase.initializeApp(firebaseConfig);
