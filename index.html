@@ -3,179 +3,406 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simbela Tutoring Services</title>
-    <!-- Your existing styles -->
+    <title>MentorMatch</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* --- General Setup & Variables --- */
         :root {
-            --primary: #4a6fa5; --secondary: #166088; --light: #f5f5f5; --dark: #333; --success: #28a745; --warning: #ffc107; --danger: #dc3545;
+            --primary-blue: #007bff;
+            --light-blue: #e7f1ff;
+            --text-dark: #212529;
+            --text-light: #6c757d;
+            --background-light: #f8f9fa;
+            --border-color: #dee2e6;
+            --white: #ffffff;
+            --success: #28a745;
+            --light-green: #eaf6ec;
+            --warning: #ffc107;
+            --light-yellow: #fff8e1;
+            --danger: #dc3545;
+            --light-red: #fee2e2;
+            --purple: #6f42c1;
+            --light-purple: #f3eef9;
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --border-radius: 8px;
         }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: var(--dark); margin: 0; padding: 0; background-color: var(--light); }
-        .container { max-width: 1200px; margin: 0 auto; padding: 1rem; }
-        header { background-color: var(--primary); color: white; padding: 1rem 0; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--background-light);
+            color: var(--text-dark);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* --- Login Page Styles --- */
+        #login-page {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .login-box {
+            background: var(--white);
+            padding: 48px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+        }
+
+        .login-box .logo { display: inline-flex; align-items: center; justify-content: center; background-color: var(--light-blue); color: var(--primary-blue); width: 48px; height: 48px; border-radius: var(--border-radius); margin-bottom: 16px; }
+        .login-box h2 { font-size: 24px; margin: 0 0 8px 0; }
+        .login-box p { color: var(--text-light); margin-bottom: 32px; }
+
+        .social-login-btn { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--white); font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: background-color 0.2s; }
+        .social-login-btn:hover { background-color: #f8f9fa; }
+
+        .divider { display: flex; align-items: center; text-align: center; color: var(--text-light); font-size: 14px; margin: 24px 0; }
+        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid var(--border-color); }
+        .divider:not(:empty)::before { margin-right: .25em; }
+        .divider:not(:empty)::after { margin-left: .25em; }
+
+        .form-group { text-align: left; margin-bottom: 16px; }
+        .form-group label { display: block; font-weight: 500; margin-bottom: 8px; font-size: 14px; }
+        .form-control { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 6px; box-sizing: border-box; }
+        
+        .btn-primary { width: 100%; padding: 14px; border: none; border-radius: 6px; background: var(--primary-blue); color: var(--white); font-size: 16px; font-weight: 600; cursor: pointer; transition: background-color 0.2s; }
+        .btn-primary:hover { background-color: #0069d9; }
+
+
+        /* --- SHARED DASHBOARD STYLES --- */
+        .dashboard { display: none; }
+        header { background-color: var(--white); border-bottom: 1px solid var(--border-color); padding: 16px 0; position: sticky; top: 0; z-index: 1000; }
         header .container { display: flex; justify-content: space-between; align-items: center; }
-        .logo h1 { margin: 0; font-size: 1.8rem; }
-        nav ul { display: flex; list-style: none; margin: 0; padding: 0; }
-        nav ul li { margin-left: 1.5rem; }
-        nav ul li a { color: white; text-decoration: none; font-weight: 500; transition: opacity 0.3s; cursor: pointer; }
-        nav ul li a:hover { opacity: 0.8; }
-        .section { padding: 2rem 0; }
-        .page-section { display: none; }
-        .page-section.active { display: block; }
-        .hero { background-color: var(--secondary); color: white; text-align: center; padding: 3rem 0; }
-        .hero h2 { font-size: 2.5rem; margin-bottom: 1rem; }
-        .hero p { font-size: 1.2rem; max-width: 700px; margin: 0 auto 2rem; }
-        .btn { display: inline-block; padding: 0.8rem 1.5rem; background-color: var(--primary); color: white; text-decoration: none; border-radius: 4px; font-weight: 500; cursor: pointer; transition: all 0.3s; border: none; }
-        .btn:hover { background-color: #3a5a84; }
-        .btn-danger { background-color: var(--danger); }
-        .btn-danger:hover { background-color: #c82333; }
-        .btn-success { background-color: var(--success); }
-        .card { background-color: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); padding: 2rem; margin-bottom: 2rem; }
-        .form-group { margin-bottom: 1.5rem; }
-        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
-        .form-control { width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; box-sizing: border-box; }
-        .success-message { background-color: #d4edda; color: #155724; padding: 1rem; border-radius: 4px; margin-bottom: 1.5rem; display: none; }
-        .alert { padding: 1rem; border-radius: 4px; margin-bottom: 1rem; }
-        .alert-danger { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-        footer { background-color: var(--dark); color: white; padding: 2rem 0; text-align: center; }
-        .user-info { display: flex; align-items: center; gap: 1rem; }
-        .role-badge { background-color: var(--warning); color: var(--dark); padding: 0.2rem 0.5rem; border-radius: 3px; font-size: 0.8rem; font-weight: bold; }
-        .role-badge.admin { background-color: var(--danger); color: white; }
-        .booking-card { border: 1px solid #ddd; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; background-color: white; }
-        .booking-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
-        .booking-status { padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
-        .status-confirmed { background-color: #d4edda; color: #155724; }
-        .status-pending { background-color: #fff3cd; color: #856404; }
-        .status-cancelled { background-color: #f8d7da; color: #721c24; }
-        .time-slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem; }
-        .time-slot { padding: 0.8rem; border: 2px solid #ddd; border-radius: 4px; text-align: center; cursor: pointer; transition: all 0.3s; }
-        .time-slot:hover { border-color: var(--primary); }
-        .time-slot.available { border-color: var(--success); background-color: #f8fff9; }
-        .time-slot.selected { border-color: var(--primary); background-color: var(--primary); color: white; }
-        .time-slot.full { border-color: var(--danger); background-color: #fff8f8; cursor: not-allowed; opacity: 0.6; }
-        .login-btn-group { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
-        .auth-btn { width: 250px; padding: 0.8rem 1.5rem; }
+        .header-left { display: flex; align-items: center; gap: 32px; }
+        .header-logo { font-size: 20px; font-weight: 700; text-decoration: none; color: var(--text-dark); }
+        nav ul { display: flex; list-style: none; margin: 0; padding: 0; gap: 24px; }
+        nav a { color: var(--text-light); text-decoration: none; font-weight: 500; font-size: 15px; position: relative; padding: 8px 0; }
+        nav a.active { color: var(--text-dark); }
+        nav a.active::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background-color: var(--primary-blue); }
+        .header-right { display: flex; align-items: center; gap: 20px; }
+        .icon-btn { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-light); position: relative; }
+        .user-profile { position: relative; }
+        .user-avatar { width: 36px; height: 36px; border-radius: 50%; background-color: var(--primary-blue); color: var(--white); display: flex; align-items: center; justify-content: center; font-weight: 600; cursor: pointer; }
+        .dropdown-menu { display: none; position: absolute; top: 120%; right: 0; background-color: var(--white); border-radius: var(--border-radius); box-shadow: var(--box-shadow); list-style: none; padding: 8px 0; margin: 0; width: 180px; overflow: hidden; }
+        .user-profile:hover .dropdown-menu { display: block; }
+        .dropdown-menu li a { display: block; padding: 10px 20px; color: var(--text-dark); text-decoration: none; font-size: 15px; }
+        .dropdown-menu li a:hover { background-color: var(--background-light); }
+        main { padding-top: 32px; padding-bottom: 48px; }
+        .welcome-header { margin-bottom: 32px; }
+        .welcome-header h1 { font-size: 28px; margin: 0 0 4px 0; }
+        .welcome-header p { color: var(--text-light); margin: 0; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; margin-bottom: 48px; }
+        .stat-card { background: var(--white); padding: 24px; border-radius: var(--border-radius); display: flex; justify-content: space-between; align-items: center; }
+        .stat-card-info h3 { font-size: 32px; margin: 0 0 4px 0; }
+        .stat-card-info p { margin: 0; color: var(--text-light); font-weight: 500; }
+        .stat-card-icon { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .icon-blue { background-color: var(--light-blue); color: var(--primary-blue); }
+        .icon-yellow { background-color: var(--light-yellow); color: var(--warning); }
+        .icon-green { background-color: var(--light-green); color: var(--success); }
+        .icon-purple { background-color: var(--light-purple); color: var(--purple); }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .section-header h2 { font-size: 22px; margin: 0; }
+        .status-badge { padding: 4px 10px; border-radius: 16px; font-size: 13px; font-weight: 600; text-align: center; }
+
+        /* --- STUDENT DASHBOARD SPECIFIC STYLES --- */
+        .table-wrapper { background: var(--white); border-radius: var(--border-radius); overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 16px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        th { color: var(--text-light); font-size: 13px; text-transform: uppercase; font-weight: 500; }
+        td { font-size: 15px; }
+        tr:last-child td { border-bottom: none; }
+        .teacher-cell { display: flex; align-items: center; gap: 12px; }
+        .teacher-avatar { width: 36px; height: 36px; border-radius: 50%; color: var(--white); display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0; }
+        .avatar-ms { background-color: #6f42c1; }
+        .avatar-rj { background-color: #fd7e14; }
+        .avatar-aw { background-color: #d63384; }
+        .teacher-info span { display: block; }
+        .teacher-info span:last-child { color: var(--text-light); font-size: 14px; }
+        .status-available { background-color: var(--light-green); color: var(--success); }
+        .status-almost-full { background-color: var(--light-yellow); color: #f59e0b; }
+        .status-full { background-color: var(--light-red); color: var(--danger); }
+        .action-btn { color: var(--primary-blue); font-weight: 600; text-decoration: none; }
+        .action-btn-disabled { color: var(--text-light); cursor: not-allowed; }
+        .sessions-section { margin-top: 48px; }
+        .sessions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 24px; }
+        .session-card { background: var(--white); padding: 24px; border-radius: var(--border-radius); border: 1px solid var(--border-color); }
+        .session-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+        .session-card-header h3 { margin: 0; font-size: 18px; }
+        .session-card-header .status-badge { border: 1px solid #198754; }
+        .session-card-tutor { color: var(--text-light); margin-bottom: 16px; }
+        .session-card-details { list-style: none; padding: 0; margin: 0 0 24px 0; display: flex; flex-direction: column; gap: 12px; }
+        .session-card-details li { display: flex; align-items: center; gap: 10px; }
+        .session-card-actions { display: flex; gap: 16px; padding-top: 16px; border-top: 1px solid var(--border-color); }
+        .session-card-actions a { text-decoration: none; font-weight: 500; }
+        .action-cancel { color: var(--danger); }
+
+        /* --- TEACHER DASHBOARD SPECIFIC STYLES --- */
+        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 32px; }
+        .main-column, .sidebar-column { display: flex; flex-direction: column; gap: 24px; }
+        .card { background: var(--white); border-radius: var(--border-radius); padding: 24px; }
+        .request-card { border: 1px solid var(--border-color); padding: 20px; border-radius: var(--border-radius); }
+        .request-card:not(:last-child) { margin-bottom: 16px; }
+        .request-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+        .student-info { display: flex; gap: 12px; align-items: center; }
+        .student-avatar { width: 40px; height: 40px; border-radius: 50%; color: var(--white); display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0; }
+        .avatar-js { background-color: #0d6efd; }
+        .avatar-ak { background-color: #198754; }
+        .student-name span { display: block; font-weight: 600; }
+        .student-name span:last-child { color: var(--text-light); font-size: 14px; font-weight: 400; }
+        .status-pending { background-color: var(--light-yellow); color: var(--warning); }
+        .request-details { list-style: none; padding: 0; margin: 0 0 16px 0; display: flex; flex-direction: column; gap: 8px; font-size: 15px; }
+        .request-details li { display: flex; align-items: center; gap: 10px; color: var(--text-light); }
+        .request-details li svg { flex-shrink: 0; }
+        .request-note { background-color: var(--background-light); border-radius: 6px; padding: 12px; font-size: 14px; margin-bottom: 20px; }
+        .request-note strong { color: var(--text-dark); display: block; margin-bottom: 4px; }
+        .request-actions button { padding: 8px 16px; border-radius: 6px; border: none; font-weight: 600; cursor: pointer; }
+        .btn-approve { background-color: var(--primary-blue); color: var(--white); }
+        .btn-decline { background-color: var(--danger); color: var(--white); }
+        .btn-message { background-color: var(--border-color); color: var(--text-dark); }
+        
+        .schedule-timeline { position: relative; }
+        .schedule-timeline::before { content: ''; position: absolute; left: 40px; top: 10px; bottom: 10px; width: 2px; background-color: var(--border-color); }
+        .schedule-item { display: flex; align-items: flex-start; gap: 24px; position: relative; }
+        .schedule-item:not(:last-child) { margin-bottom: 20px; }
+        .schedule-time { flex-shrink: 0; width: 60px; text-align: right; color: var(--text-light); font-size: 14px; padding-top: 4px; }
+        .schedule-card { flex-grow: 1; border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 16px; }
+        .schedule-card.is-session { background-color: var(--light-blue); border-color: var(--primary-blue); }
+        .schedule-card h4 { margin: 0 0 12px 0; font-size: 16px; }
+        .schedule-card-details { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; font-size: 14px; }
+        .schedule-card-details li { display: flex; align-items: center; gap: 8px; }
+        .schedule-card.is-empty { color: var(--text-light); }
+        
+        @media (max-width: 992px) { .dashboard-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) { nav ul { display: none; } }
     </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="logo"><h1>Simbela Tutoring</h1></div>
-            <nav>
-                <ul>
-                    <li><a data-section="home">Home</a></li>
-                    <li><a data-section="services">Services</a></li>
-                    <li class="auth-only" style="display: none;"><a data-section="bookings">Book a Session</a></li>
-                    <li class="admin-only" style="display: none;"><a data-section="admin">Admin Panel</a></li>
-                    <li class="admin-only" style="display: none;"><a data-section="questions">Questions</a></li>
-                    <li class="no-auth"><a data-section="login">Login</a></li>
-                    <li id="user-info" style="display: none;" class="user-info">
-                        <span id="user-name"></span>
-                        <span id="user-role" class="role-badge"></span>
-                        <button id="logout-btn" class="btn btn-danger" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">Logout</button>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-    </header>
 
-    <!-- Home Section (Default View) -->
-    <section id="home-section" class="section page-section active">
-        <div class="hero">
-            <div class="container">
-                <h2>Expert Tutoring for Academic Success</h2>
-                <p>Login to book your mentorship slot and start your journey to excellence.</p>
-                <a class="btn btn-light no-auth" data-section="login">Login to Get Started</a>
-                <a class="btn btn-light auth-only" style="display: none;" data-section="bookings">Book a Session Now</a>
+    <!-- ====================================================== -->
+    <!--                       LOGIN PAGE                       -->
+    <!-- ====================================================== -->
+    <div id="login-page">
+        <div class="login-box">
+            <div class="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
             </div>
-        </div>
-    </section>
+            <h2>MentorMatch</h2>
+            <p>Sign in to access your mentorship platform</p>
 
-    <!-- Login Section -->
-    <section id="login-section" class="section page-section">
-        <div class="container" style="max-width: 500px;">
-            <div class="card">
-                <h2>Login or Sign Up</h2>
-                <p>Use your Google or Microsoft account to continue.</p>
-                <div class="login-btn-group">
-                    <button id="google-login-btn" class="btn auth-btn">Sign in with Google</button>
-                    <button id="microsoft-login-btn" class="btn auth-btn" style="background-color: #2f2f2f;">Sign in with Microsoft</button>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="role-select">I am a...</label>
+                    <select id="role-select" class="form-control">
+                        <option value="student">Student</option>
+                        <option value="teacher">Teacher</option>
+                    </select>
                 </div>
-                <div id="login-error" class="alert alert-danger" style="display: none; margin-top: 1rem;"></div>
-            </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" placeholder="Enter your email" value="demo@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" placeholder="Enter your password" value="password">
+                </div>
+                <button type="submit" class="btn-primary">Sign in</button>
+            </form>
         </div>
-    </section>
+    </div>
 
-    <!-- Services Section -->
-    <section id="services-section" class="section page-section">
-        <div class="container"><h2>Our Services</h2><p>We offer tutoring in Math, Science, English, and more.</p></div>
-    </section>
 
-    <!-- Bookings Section (Student) -->
-    <section id="bookings-section" class="section page-section">
-        <div class="container">
-            <div class="card">
-                <h2>Book a Tutoring Session</h2>
-                <div id="booking-error" class="alert alert-danger" style="display: none;"></div>
-                <div id="booking-success" class="success-message"></div>
-                <div id="available-slots-container">
-                    <h3>Available Slots</h3>
-                    <div id="slots-list">
-                        <p>Loading available slots...</p>
+    <!-- ====================================================== -->
+    <!--                   STUDENT DASHBOARD                    -->
+    <!-- ====================================================== -->
+    <div id="student-dashboard-page" class="dashboard">
+        <header>
+            <div class="container">
+                <div class="header-left"><a href="#" class="header-logo">MentorMatch</a>
+                    <nav>
+                        <ul>
+                            <li><a href="#" class="active">Dashboard</a></li>
+                            <li><a href="#">My Requests</a></li><li><a href="#">Teachers</a></li><li><a href="#">Calendar</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="header-right">
+                    <button class="icon-btn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></button>
+                    <div class="user-profile">
+                        <div class="user-avatar">JS</div>
+                        <ul class="dropdown-menu"><li><a href="#" class="logout-btn">Sign out</a></li></ul>
                     </div>
                 </div>
-                <hr>
-                <h3>Your Bookings</h3>
-                <div id="my-bookings-list">
-                    <p>Loading your bookings...</p>
+            </div>
+        </header>
+        <main class="container">
+            <div class="welcome-header"><h1>Welcome back, John!</h1><p>Find and request mentorship slots from your teachers.</p></div>
+            <section class="stats-grid">
+                <div class="stat-card"><div class="stat-card-info"><h3>3</h3><p>Upcoming Sessions</p></div><div class="stat-card-icon icon-blue"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></div></div>
+                <div class="stat-card"><div class="stat-card-info"><h3>2</h3><p>Pending Requests</p></div><div class="stat-card-icon icon-yellow"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div></div>
+                <div class="stat-card"><div class="stat-card-info"><h3>12</h3><p>Completed Sessions</p></div><div class="stat-card-icon icon-green"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div></div>
+            </section>
+            <section class="available-slots-section">
+                <div class="section-header"><h2>Available Mentorship Slots</h2></div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead><tr><th>Teacher</th><th>Subject</th><th>Date & Time</th><th>Duration</th><th>Availability</th><th>Action</th></tr></thead>
+                        <tbody>
+                            <tr><td><div class="teacher-cell"><div class="teacher-avatar avatar-ms">MS</div><div class="teacher-info"><span>Dr. Maria Smith</span><span>Computer Science</span></div></div></td><td>Data Structures</td><td>Jun 15, 2023 <br> 10:00 AM - 11:00 AM</td><td>1 hour</td><td><span class="status-badge status-available">Available (3/5)</span></td><td><a href="#" class="action-btn">Request Slot</a></td></tr>
+                            <tr><td><div class="teacher-cell"><div class="teacher-avatar avatar-rj">RJ</div><div class="teacher-info"><span>Prof. Robert Johnson</span><span>Mathematics</span></div></div></td><td>Calculus II</td><td>Jun 16, 2023 <br> 2:00 PM - 3:30 PM</td><td>1.5 hours</td><td><span class="status-badge status-almost-full">Almost Full (4/5)</span></td><td><a href="#" class="action-btn">Request Slot</a></td></tr>
+                            <tr><td><div class="teacher-cell"><div class="teacher-avatar avatar-aw">AW</div><div class="teacher-info"><span>Dr. Alice Wong</span><span>Physics</span></div></div></td><td>Quantum Mechanics</td><td>Jun 17, 2023 <br> 9:00 AM - 10:30 AM</td><td>1.5 hours</td><td><span class="status-badge status-full">Full (5/5)</span></td><td><a href="#" class="action-btn-disabled">Full</a></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            <section class="sessions-section">
+                <div class="section-header"><h2>My Upcoming Sessions</h2></div>
+                <div class="sessions-grid"><div class="session-card"><div class="session-card-header"><h3>Data Structures</h3><span class="status-badge status-available">Confirmed</span></div><p class="session-card-tutor">With Dr. Maria Smith</p><ul class="session-card-details"><li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg><span>June 15, 2023</span></li><li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg><span>10:00 AM - 11:00 AM</span></li><li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 16v1a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2m5.73-2.61L12 3l-1.73-1.61a2 2 0 0 0-2.83 0L6 3H3a2 2 0 0 0-2 2v2"></path><rect x="15" y="3" width="7" height="7"></rect><line x1="18.5" y1="6.5" x2="18.5" y2="6.51"></line></svg><span>Zoom Meeting</span></li></ul><div class="session-card-actions"><a href="#" class="action-btn">View Details</a><a href="#" class="action-cancel">Cancel</a></div></div><div class="session-card"><div class="session-card-header"><h3>Calculus II</h3><span class="status-badge status-available">Confirmed</span></div><p class="session-card-tutor">With Prof. Robert Johnson</p><ul class="session-card-details"><li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg><span>June 16, 2023</span></li><li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg><span>2:00 PM - 3:30 PM</span></li><li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg><span>Room 302, Science Building</span></li></ul><div class="session-card-actions"><a href="#" class="action-btn">View Details</a><a href="#" class="action-cancel">Cancel</a></div></div></div>
+            </section>
+        </main>
+    </div>
+
+
+    <!-- ====================================================== -->
+    <!--                   TEACHER DASHBOARD                    -->
+    <!-- ====================================================== -->
+    <div id="teacher-dashboard-page" class="dashboard">
+        <header>
+            <div class="container">
+                <div class="header-left"><a href="#" class="header-logo">MentorMatch</a>
+                    <nav>
+                        <ul>
+                            <li><a href="#" class="active">Dashboard</a></li>
+                            <li><a href="#">My Slots</a></li><li><a href="#">Requests</a></li><li><a href="#">Students</a></li><li><a href="#">Calendar</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="header-right">
+                    <button class="icon-btn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></button>
+                    <div class="user-profile">
+                        <div class="user-avatar avatar-ms">MS</div>
+                        <ul class="dropdown-menu"><li><a href="#" class="logout-btn">Sign out</a></li></ul>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- Admin Panel -->
-    <section id="admin-section" class="section page-section">
-        <div class="container">
-            <div class="card">
-                <h2>Admin Panel</h2>
-                <div class="card">
-                    <h3>Create New Mentorship Slot</h3>
-                    <form id="create-slot-form">
-                        <div class="form-group"><label for="slot-subject">Subject</label><input type="text" id="slot-subject" class="form-control" required></div>
-                        <div class="form-group"><label for="slot-date">Date</label><input type="date" id="slot-date" class="form-control" required></div>
-                        <div class="form-group"><label for="slot-time">Time</label><input type="time" id="slot-time" class="form-control" required></div>
-                        <div class="form-group"><label for="slot-capacity">Capacity</label><input type="number" id="slot-capacity" class="form-control" min="1" value="5" required></div>
-                        <button type="submit" class="btn btn-success">Create Slot</button>
-                    </form>
-                    <div id="slot-success" class="success-message"></div>
+        </header>
+        <main class="container">
+            <div class="welcome-header"><h1>Welcome, Dr. Smith!</h1><p>Manage your mentorship slots and student requests.</p></div>
+            <section class="stats-grid">
+                <div class="stat-card"><div class="stat-card-info"><h3>5</h3><p>Active Slots</p></div><div class="stat-card-icon icon-blue"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></div></div>
+                <div class="stat-card"><div class="stat-card-info"><h3>8</h3><p>Pending Requests</p></div><div class="stat-card-icon icon-yellow"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div></div>
+                <div class="stat-card"><div class="stat-card-info"><h3>2</h3><p>Today's Sessions</p></div><div class="stat-card-icon icon-green"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z"></path><path d="m15.5 14.5-3 3-1.5-1.5"></path></svg></div></div>
+                <div class="stat-card"><div class="stat-card-info"><h3>42</h3><p>Total Students</p></div><div class="stat-card-icon icon-purple"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div></div>
+            </section>
+            <section class="dashboard-grid">
+                <div class="main-column">
+                    <div class="card">
+                        <h3>Pending Requests</h3>
+                        <div class="request-card">
+                            <div class="request-header"><div class="student-info"><div class="student-avatar avatar-js">JS</div><div class="student-name"><span>John Smith</span><span>Computer Science, Year 2</span></div></div><span class="status-badge status-pending">Pending</span></div>
+                            <ul class="request-details">
+                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>Data Structures</li>
+                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>June 15, 2023</li>
+                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>10:00 AM - 11:00 AM</li>
+                            </ul>
+                            <div class="request-note"><strong>Request Note:</strong> I need help understanding binary trees and graph traversal algorithms.</div>
+                            <div class="request-actions"><button class="btn-approve">Approve</button> <button class="btn-decline">Decline</button> <button class="btn-message">Message</button></div>
+                        </div>
+                        <div class="request-card">
+                             <div class="request-header"><div class="student-info"><div class="student-avatar avatar-ak">AK</div><div class="student-name"><span>Amy Kim</span><span>Computer Science, Year 3</span></div></div><span class="status-badge status-pending">Pending</span></div>
+                             <ul class="request-details">
+                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>Algorithms Analysis</li>
+                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>June 17, 2023</li>
+                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>1:00 PM - 2:00 PM</li>
+                            </ul>
+                            <div class="request-note"><strong>Request Note:</strong> I'm struggling with dynamic programming concepts and would like some guidance.</div>
+                            <div class="request-actions"><button class="btn-approve">Approve</button> <button class="btn-decline">Decline</button> <button class="btn-message">Message</button></div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card">
-                    <h3>All Bookings (Pending Approval)</h3>
-                    <div id="admin-bookings-list"><p>Loading pending bookings...</p></div>
+                <div class="sidebar-column">
+                    <div class="card">
+                        <h3>Today's Schedule</h3>
+                        <div class="schedule-timeline">
+                            <div class="schedule-item"><div class="schedule-time">9:00 AM</div><div class="schedule-card is-session"><h4>Quantum Mechanics</h4><ul class="schedule-card-details"><li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>5 students</li><li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>Room 302, Science Building</li></ul></div></div>
+                            <div class="schedule-item"><div class="schedule-time">11:00 AM</div><div class="schedule-card is-empty">No scheduled sessions</div></div>
+                            <div class="schedule-item"><div class="schedule-time">2:00 PM</div><div class="schedule-card is-session"><h4>Data Structures</h4><ul class="schedule-card-details"><li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>3 students</li><li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 16v1a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2m5.73-2.61L12 3l-1.73-1.61a2 2 0 0 0-2.83 0L6 3H3a2 2 0 0 0-2 2v2"></path><rect x="15" y="3" width="7" height="7"></rect><line x1="18.5" y1="6.5" x2="18.5" y2="6.51"></line></svg>Zoom Meeting</li></ul></div></div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Questions Section (Admin) -->
-    <section id="questions-section" class="section page-section">
-        <div class="container">
-            <div class="card">
-                <h2>Student Questions</h2>
-                <div id="questions-list"><p>Loading questions...</p></div>
-            </div>
-        </div>
-    </section>
+            </section>
+        </main>
+    </div>
 
-    <footer>
-        <div class="container"><p>© <span id="current-year"></span> Simbela Tutoring Services</p></div>
-    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginPage = document.getElementById('login-page');
+            const studentDashboard = document.getElementById('student-dashboard-page');
+            const teacherDashboard = document.getElementById('teacher-dashboard-page');
+            
+            const loginForm = document.getElementById('login-form');
+            const roleSelect = document.getElementById('role-select');
+            
+            // Get all logout buttons
+            const logoutButtons = document.querySelectorAll('.logout-btn');
 
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+            // --- View Switching Functions ---
+            function showLogin() {
+                studentDashboard.style.display = 'none';
+                teacherDashboard.style.display = 'none';
+                loginPage.style.display = 'flex';
+            }
 
-    <!-- Your App Logic -->
-    <script src="main.js"></script>
+            function showStudentDashboard() {
+                loginPage.style.display = 'none';
+                teacherDashboard.style.display = 'none';
+                studentDashboard.style.display = 'block';
+            }
+
+            function showTeacherDashboard() {
+                loginPage.style.display = 'none';
+                studentDashboard.style.display = 'none';
+                teacherDashboard.style.display = 'block';
+            }
+
+            // --- Event Listeners ---
+            loginForm.addEventListener('submit', (event) => {
+                event.preventDefault(); // Stop the form from actually submitting
+                const selectedRole = roleSelect.value;
+
+                console.log(`Simulating login as: ${selectedRole}`);
+
+                if (selectedRole === 'student') {
+                    showStudentDashboard();
+                } else if (selectedRole === 'teacher') {
+                    showTeacherDashboard();
+                }
+            });
+
+            // Add a single event listener for all logout buttons
+            logoutButtons.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    console.log('Simulating logout...');
+                    showLogin();
+                });
+            });
+
+            // Initially, show the login page
+            showLogin();
+        });
+    </script>
 </body>
 </html>
