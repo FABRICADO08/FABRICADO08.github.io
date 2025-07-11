@@ -1,561 +1,73 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simbela Tutoring Services</title>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <!-- Your existing styles -->
     <style>
         :root {
-            --primary: #4a6fa5;
-            --secondary: #166088;
-            --light: #f5f5f5;
-            --dark: #333;
-            --success: #28a745;
-            --warning: #ffc107;
-            --danger: #dc3545;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--dark);
-            margin: 0;
-            padding: 0;
-            background-color: var(--light);
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem;
-        }
-        
-        header {
-            background-color: var(--primary);
-            color: white;
-            padding: 1rem 0;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        
-        header .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo h1 {
-            margin: 0;
-            font-size: 1.8rem;
-        }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-        
-        nav ul li {
-            margin-left: 1.5rem;
-        }
-        
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: opacity 0.3s;
-        }
-        
-        nav ul li a:hover {
-            opacity: 0.8;
-        }
-        
-        .section {
-            padding: 2rem 0;
-        }
-        
-        .page-section {
-            display: none;
-        }
-        
-        .page-section.active {
-            display: block;
-        }
-        
-        .hero {
-            background-color: var(--secondary);
-            color: white;
-            text-align: center;
-            padding: 3rem 0;
-        }
-        
-        .hero h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 700px;
-            margin: 0 auto 2rem;
-        }
-        
-        .btn {
-            display: inline-block;
-            padding: 0.8rem 1.5rem;
-            background-color: var(--primary);
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: none;
-        }
-        
-        .btn:hover {
-            background-color: #3a5a84;
-        }
-        
-        .btn-light {
-            background-color: white;
-            color: var(--primary);
-        }
-        
-        .btn-light:hover {
-            background-color: #eaeaea;
-        }
-        
-        .btn-danger {
-            background-color: var(--danger);
-        }
-        
-        .btn-danger:hover {
-            background-color: #c82333;
-        }
-        
-        .btn-success {
-            background-color: var(--success);
-        }
-        
-        .btn-success:hover {
-            background-color: #218838;
-        }
-        
-        .card {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
-            margin-bottom: 2rem;
-        }
-        
-        .subjects {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-        
-        .subject-card {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 1.5rem;
-            transition: transform 0.3s;
-        }
-        
-        .subject-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .subject-card h3 {
-            color: var(--primary);
-            margin-top: 0;
-        }
-        
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
-        
-        .form-control {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 1rem;
-            box-sizing: border-box;
-        }
-        
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-        
-        textarea.form-control {
-            min-height: 150px;
-            resize: vertical;
-        }
-        
-        .error {
-            color: var(--danger);
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-        }
-        
-        .success-message {
-            background-color: #d4edda;
-            color: #155724;
-            padding: 1rem;
-            border-radius: 4px;
-            margin-bottom: 1.5rem;
-            display: none;
-        }
-        
-        .alert {
-            padding: 1rem;
-            border-radius: 4px;
-            margin-bottom: 1rem;
-        }
-        
-        .alert-danger {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        
-        .alert-success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        
-        footer {
-            background-color: var(--dark);
-            color: white;
-            padding: 2rem 0;
-            text-align: center;
-        }
-        
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .user-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-        }
-        
-        .role-badge {
-            background-color: var(--warning);
-            color: var(--dark);
-            padding: 0.2rem 0.5rem;
-            border-radius: 3px;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-        
-        .role-badge.admin {
-            background-color: var(--danger);
-            color: white;
-        }
-        
-        .booking-card {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            background-color: white;
-        }
-        
-        .booking-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
-        }
-        
-        .booking-status {
-            padding: 0.3rem 0.6rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-        
-        .status-confirmed {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        
-        .status-pending {
-            background-color: #fff3cd;
-            color: #856404;
-        }
-        
-        .status-cancelled {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-        
-        .booking-details {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin: 1rem 0;
-        }
-        
-        .detail-item {
-            display: flex;
-            flex-direction: column;
-            gap: 0.2rem;
-        }
-        
-        .detail-label {
-            font-weight: bold;
-            color: var(--secondary);
-            font-size: 0.9rem;
-        }
-        
-        .detail-value {
-            color: var(--dark);
-        }
-        
-        .google-signin-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            background-color: #4285f4;
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background-color 0.3s;
-        }
-        
-        .google-signin-btn:hover {
-            background-color: #357ae8;
-        }
-        
-        .calendar-container {
-            background-color: white;
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        .calendar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 1px;
-            background-color: #ddd;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-        
-        .calendar-day {
-            background-color: white;
-            padding: 0.5rem;
-            text-align: center;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        
-        .calendar-day:hover {
-            background-color: #f0f0f0;
-        }
-        
-        .calendar-day.selected {
-            background-color: var(--primary);
-            color: white;
-        }
-        
-        .calendar-day.disabled {
-            background-color: #f5f5f5;
-            color: #999;
-            cursor: not-allowed;
-        }
-        
-        .time-slots {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        
-        .time-slot {
-            padding: 0.8rem;
-            border: 2px solid #ddd;
-            border-radius: 4px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .time-slot:hover {
-            border-color: var(--primary);
-        }
-        
-        .time-slot.available {
-            border-color: var(--success);
-            background-color: #f8fff9;
-        }
-        
-        .time-slot.selected {
-            border-color: var(--primary);
-            background-color: var(--primary);
-            color: white;
-        }
-        
-        .time-slot.full {
-            border-color: var(--danger);
-            background-color: #fff8f8;
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-        
-        .testimonials {
-            background-color: white;
-            padding: 3rem 0;
-            margin: 2rem 0;
-        }
-        
-        .testimonial-card {
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        .testimonial-text {
-            font-style: italic;
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-            color: var(--dark);
-        }
-        
-        .testimonial-author {
-            font-weight: bold;
-            color: var(--primary);
-        }
-        
-        .rating {
-            display: flex;
-            gap: 0.2rem;
-            margin-bottom: 1rem;
-        }
-        
-        .star {
-            color: #ffc107;
-            font-size: 1.2rem;
-        }
-        
-        .questions-section {
-            margin-top: 2rem;
-        }
-        
-        .question-card {
-            background-color: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            border-left: 4px solid var(--primary);
-        }
-        
-        .question-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .question-status {
-            padding: 0.3rem 0.6rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-        
-        .status-new {
-            background-color: #fff3cd;
-            color: #856404;
-        }
-        
-        .status-responded {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            header .container {
-                flex-direction: column;
-            }
-            
-            nav ul {
-                margin-top: 1rem;
-            }
-            
-            nav ul li {
-                margin: 0 0.5rem;
-            }
-            
-            .subjects, .time-slots {
-                grid-template-columns: 1fr;
-            }
-            
-            .booking-details {
-                grid-template-columns: 1fr;
-            }
-            
-            .calendar-grid {
-                font-size: 0.9rem;
-            }
-        }
+            --primary: #4a6fa5; --secondary: #166088; --light: #f5f5f5; --dark: #333; --success: #28a745; --warning: #ffc107; --danger: #dc3545;
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: var(--dark); margin: 0; padding: 0; background-color: var(--light); }
+        .container { max-width: 1200px; margin: 0 auto; padding: 1rem; }
+        header { background-color: var(--primary); color: white; padding: 1rem 0; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
+        header .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo h1 { margin: 0; font-size: 1.8rem; }
+        nav ul { display: flex; list-style: none; margin: 0; padding: 0; }
+        nav ul li { margin-left: 1.5rem; }
+        nav ul li a { color: white; text-decoration: none; font-weight: 500; transition: opacity 0.3s; cursor: pointer; }
+        nav ul li a:hover { opacity: 0.8; }
+        .section { padding: 2rem 0; }
+        .page-section { display: none; }
+        .page-section.active { display: block; }
+        .hero { background-color: var(--secondary); color: white; text-align: center; padding: 3rem 0; }
+        .hero h2 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .hero p { font-size: 1.2rem; max-width: 700px; margin: 0 auto 2rem; }
+        .btn { display: inline-block; padding: 0.8rem 1.5rem; background-color: var(--primary); color: white; text-decoration: none; border-radius: 4px; font-weight: 500; cursor: pointer; transition: all 0.3s; border: none; }
+        .btn:hover { background-color: #3a5a84; }
+        .btn-danger { background-color: var(--danger); }
+        .btn-danger:hover { background-color: #c82333; }
+        .btn-success { background-color: var(--success); }
+        .card { background-color: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); padding: 2rem; margin-bottom: 2rem; }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+        .form-control { width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; box-sizing: border-box; }
+        .success-message { background-color: #d4edda; color: #155724; padding: 1rem; border-radius: 4px; margin-bottom: 1.5rem; display: none; }
+        .alert { padding: 1rem; border-radius: 4px; margin-bottom: 1rem; }
+        .alert-danger { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        footer { background-color: var(--dark); color: white; padding: 2rem 0; text-align: center; }
+        .user-info { display: flex; align-items: center; gap: 1rem; }
+        .role-badge { background-color: var(--warning); color: var(--dark); padding: 0.2rem 0.5rem; border-radius: 3px; font-size: 0.8rem; font-weight: bold; }
+        .role-badge.admin { background-color: var(--danger); color: white; }
+        .booking-card { border: 1px solid #ddd; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; background-color: white; }
+        .booking-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+        .booking-status { padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
+        .status-confirmed { background-color: #d4edda; color: #155724; }
+        .status-pending { background-color: #fff3cd; color: #856404; }
+        .status-cancelled { background-color: #f8d7da; color: #721c24; }
+        .time-slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .time-slot { padding: 0.8rem; border: 2px solid #ddd; border-radius: 4px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .time-slot:hover { border-color: var(--primary); }
+        .time-slot.available { border-color: var(--success); background-color: #f8fff9; }
+        .time-slot.selected { border-color: var(--primary); background-color: var(--primary); color: white; }
+        .time-slot.full { border-color: var(--danger); background-color: #fff8f8; cursor: not-allowed; opacity: 0.6; }
+        .login-btn-group { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+        .auth-btn { width: 250px; padding: 0.8rem 1.5rem; }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header>
         <div class="container">
-            <div class="logo">
-                <h1>Simbela Tutoring Services</h1>
-            </div>
+            <div class="logo"><h1>Simbela Tutoring</h1></div>
             <nav>
                 <ul>
-                    <li><a href="#" data-section="home">Home</a></li>
-                    <li><a href="#" data-section="services">Services</a></li>
-                    <li><a href="#" data-section="pricing">Pricing</a></li>
-                    <li id="contact-nav"><a href="#" data-section="contact">Contact</a></li>
-                    <li class="nav-item" id="testimonials-nav"><a class="nav-link" href="#" data-section="testimonials">Testimonials</a></li>
-                    <li id="login-nav"><a href="#" data-section="login">Login</a></li>
-                    <li id="dashboard-nav" style="display: none;"><a href="#" data-section="dashboard">Dashboard</a></li>
-                    <li id="bookings-nav" style="display: none;"><a href="#" data-section="bookings">Bookings</a></li>
-                   
-                    <li id="admin-nav" style="display: none;"><a href="#" data-section="admin">Administration</a></li>
-                    <li id="questions-nav" style="display: none;"><a href="#" data-section="questions">Questions</a></li>
+                    <li><a data-section="home">Home</a></li>
+                    <li><a data-section="services">Services</a></li>
+                    <li class="auth-only" style="display: none;"><a data-section="bookings">Book a Session</a></li>
+                    <li class="admin-only" style="display: none;"><a data-section="admin">Admin Panel</a></li>
+                    <li class="admin-only" style="display: none;"><a data-section="questions">Questions</a></li>
+                    <li class="no-auth"><a data-section="login">Login</a></li>
                     <li id="user-info" style="display: none;" class="user-info">
                         <span id="user-name"></span>
                         <span id="user-role" class="role-badge"></span>
@@ -566,495 +78,104 @@
         </div>
     </header>
 
-    <!-- Login Section -->
-    <section id="login-section" class="section page-section">
-        <div class="container">
-            <div class="card">
-                <h2>Login to Your Account</h2>
-                <p>Sign in with your Google account to access your tutoring dashboard.</p>
-                
-                <div id="google-signin-container">
-                    <button id="google-signin-btn" class="google-signin-btn">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                        </svg>
-                        Sign in with Google
-                    </button>
-                </div>
-                
-                <div class="success-message" id="login-success">
-                    Successfully signed in! Redirecting...
-                </div>
-                
-                <div id="login-error" class="alert alert-danger" style="display: none;">
-                    Login failed. Please try again.
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Dashboard Section (Users Only) -->
-    <section id="dashboard-section" class="section page-section">
-        <div class="container">
-            <div class="card">
-                <h2>Welcome, <span id="dashboard-user-name">Student</span>!</h2>
-                <p>Here you can manage your tutoring sessions, access resources, and get help.</p>
-                
-                <div class="card">
-                    <h3>Your Recent Bookings</h3>
-                    <div id="user-bookings">
-                        <p>You have no bookings yet.</p>
-                    </div>
-                    <button class="btn" id="book-session-btn">Book a New Session</button>
-                </div>
-                
-                <div class="card">
-                    <h3>Your Learning Resources</h3>
-                    <ul>
-                        <li><a href="#">Math Practice Problems</a></li>
-                        <li><a href="#">Science Study Guide</a></li>
-                        <li><a href="#">English Grammar Review</a></li>
-                        <li><a href="#">History Timeline Reference</a></li>
-                    </ul>
-                </div>
-                
-                <div class="card">
-                    <h3>Need Help?</h3>
-                    <p>Ask your tutor a question or request assistance with a specific topic.</p>
-                    <form id="help-form">
-                        <div class="form-group">
-                            <label for="help-subject">Subject</label>
-                            <select id="help-subject" class="form-control" required>
-                                <option value="">Select a subject</option>
-                                <option value="math">Mathematics</option>
-                                <option value="science">Science</option>
-                                <option value="english">English</option>
-                                <option value="history">History</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="help-message">Your Question</label>
-                            <textarea id="help-message" class="form-control" required></textarea>
-                        </div>
-                        
-                        <button type="submit" class="btn">Submit Question</button>
-                    </form>
-                    
-                    <div class="success-message" id="help-success">
-                        Your question has been submitted! Your tutor will respond shortly.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Bookings Section (Users Only) -->
-    <section id="bookings-section" class="section page-section">
-        <div class="container">
-            <div class="card">
-                <h2>Book a Tutoring Session</h2>
-                <p>Select your preferred subject, date, and time slot for your tutoring session.</p>
-                
-                <form id="booking-form">
-                    <div class="form-group">
-                        <label for="booking-subject">Subject</label>
-                        <select id="booking-subject" class="form-control" required>
-                            <option value="">Select a subject</option>
-                            <option value="mathematics">Mathematics</option>
-                            <option value="science">Science</option>
-                            <option value="english">English</option>
-                            <option value="history">History</option>
-                            <option value="test-prep">Test Preparation</option>
-                            <option value="study-skills">Study Skills</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Select Date</label>
-                        <div class="calendar-container">
-                            <div class="calendar-header">
-                                <button type="button" id="prev-month" class="btn">&lt;</button>
-                                <h3 id="current-month"></h3>
-                                <button type="button" id="next-month" class="btn">&gt;</button>
-                            </div>
-                            <div class="calendar-grid" id="calendar-grid">
-                                <!-- Calendar days will be populated by JavaScript -->
-                            </div>
-                        </div>
-                        <input type="hidden" id="selected-date" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Available Time Slots</label>
-                        <div class="time-slots" id="time-slots">
-                            <!-- Time slots will be populated by JavaScript -->
-                        </div>
-                        <input type="hidden" id="selected-time" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="booking-notes">Additional Notes (Optional)</label>
-                        <textarea id="booking-notes" class="form-control" placeholder="Any specific topics or areas you'd like to focus on..."></textarea>
-                    </div>
-                    
-                    <button type="submit" class="btn">Book Session</button>
-                </form>
-                
-                <div class="success-message" id="booking-success">
-                    Your session has been booked successfully! You'll receive a confirmation email shortly.
-                </div>
-                
-                <div id="booking-error" class="alert alert-danger" style="display: none;">
-                    This time slot is not available. Please select a different time.
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Admin Section -->
-    <section id="admin-section" class="section page-section">
-        <div class="container">
-            <div class="card">
-                <h2>Admin Dashboard</h2>
-                <p>Manage bookings, create time slots, and view system statistics.</p>
-                
-                <div class="card">
-                    <h3>Create Available Time Slots</h3>
-                    <form id="create-slot-form">
-                        <div class="form-group">
-                            <label for="slot-subject">Subject</label>
-                            <select id="slot-subject" class="form-control" required>
-                                <option value="">Select a subject</option>
-                                <option value="mathematics">Mathematics</option>
-                                <option value="science">Science</option>
-                                <option value="english">English</option>
-                                <option value="history">History</option>
-                                <option value="test-prep">Test Preparation</option>
-                                <option value="study-skills">Study Skills</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="slot-date">Date</label>
-                            <input type="date" id="slot-date" class="form-control" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="slot-time">Time</label>
-                            <select id="slot-time" class="form-control" required>
-                                <option value="">Select time</option>
-                                <option value="09:00">9:00 AM</option>
-                                <option value="10:00">10:00 AM</option>
-                                <option value="11:00">11:00 AM</option>
-                                <option value="14:00">2:00 PM</option>
-                                <option value="15:00">3:00 PM</option>
-                                <option value="16:00">4:00 PM</option>
-                                <option value="17:00">5:00 PM</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="slot-capacity">Maximum Students</label>
-                            <input type="number" id="slot-capacity" class="form-control" value="40" min="1" max="50" required>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-success">Create Time Slot</button>
-                    </form>
-                    
-                    <div class="success-message" id="slot-success">
-                        Time slot created successfully!
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <h3>Booking Statistics</h3>
-                    <div id="booking-stats">
-                        <p>Loading statistics...</p>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <h3>All Bookings</h3>
-                    <div class="form-group">
-                        <label for="filter-date">Filter by Date</label>
-                        <input type="date" id="filter-date" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="filter-subject">Filter by Subject</label>
-                        <select id="filter-subject" class="form-control">
-                            <option value="">All Subjects</option>
-                            <option value="mathematics">Mathematics</option>
-                            <option value="science">Science</option>
-                            <option value="english">English</option>
-                            <option value="history">History</option>
-                            <option value="test-prep">Test Preparation</option>
-                            <option value="study-skills">Study Skills</option>
-                        </select>
-                    </div>
-                    <div id="all-bookings">
-                        <p>Loading bookings...</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Questions Section (Admin Only) -->
-    <section id="questions-section" class="section page-section">
-        <div class="container">
-            <div class="card">
-                <h2>Student Questions & Contact Forms</h2>
-                <p>Manage and respond to student inquiries.</p>
-                
-                <div class="questions-section" id="questions-list">
-                    <p>Loading questions...</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Home Section -->
+    <!-- Home Section (Default View) -->
     <section id="home-section" class="section page-section active">
         <div class="hero">
             <div class="container">
                 <h2>Expert Tutoring for Academic Success</h2>
-                <p>Personalized one-on-one tutoring to help you achieve your academic goals and build confidence in your studies.</p>
-                <a href="#" class="btn btn-light" data-section="services">Explore Our Services</a>
-            </div>
-        </div>
-        
-        <div class="container section">
-            <h2>Why Choose Our Tutoring Services?</h2>
-            <div class="subjects">
-                <div class="subject-card">
-                    <h3>Personalized Approach</h3>
-                    <p>We tailor our teaching methods to match your learning style and academic needs, ensuring effective and efficient progress.</p>
-                </div>
-                <div class="subject-card">
-                    <h3>Experienced Tutors</h3>
-                    <p>Our tutors are subject matter experts with years of teaching experience and a passion for helping students succeed.</p>
-                </div>
-                <div class="subject-card">
-                    <h3>Flexible Scheduling</h3>
-                    <p>Book sessions at times that work for you, with options for both regular weekly sessions and on-demand help.</p>
-                </div>
-            </div>
-        </div>
-
-       <!-- Testimonials Section -->
-        <div class="testimonials">
-            <div class="container">
-                <h2>What Our Students Say</h2>
-                <div class="subjects">
-                    <div class="testimonial-card">
-                        <div class="rating">
-                            <span class="star">★</span>
-                            <span class="star">★</span>
-                            <span class="star">★</span>
-                            <span class="star">★</span>
-                            <span class="star">★</span>
-                        </div>
-                        <p class="testimonial-text">testimonial-message</p>
-                        <p class="testimonial-author">testimonial-author</p>
-                    </div>
-                </div>
+                <p>Login to book your mentorship slot and start your journey to excellence.</p>
+                <a class="btn btn-light no-auth" data-section="login">Login to Get Started</a>
+                <a class="btn btn-light auth-only" style="display: none;" data-section="bookings">Book a Session Now</a>
             </div>
         </div>
     </section>
 
-
- <!-- Services Section -->
-    <section id="services-section" class="section page-section">
-        <div class="container">
-            <h2>Our Tutoring Services</h2>
-            <p>We offer comprehensive tutoring across a wide range of subjects and academic levels.</p>
-            
-            <div class="subjects">
-                <div class="subject-card">
-                    <h3>Mathematics</h3>
-                    <p>From basic arithmetic to advanced calculus, our math tutors can help with:</p>
-                    <ul>
-                        <li>Algebra & Geometry</li>
-                        <li>Trigonometry</li>
-                        <li>Calculus & Statistics</li>
-                        <li>Standardized Test Prep</li>
-                    </ul>
-                </div>
-                <div class="subject-card">
-                    <h3>Science</h3>
-                    <p>Comprehensive science tutoring in:</p>
-                    <ul>
-                        <li>Biology & Chemistry</li>
-                        <li>Physics</li>
-                        <li>Earth Science</li>
-                        <li>Lab Report Assistance</li>
-                    </ul>
-                </div>
-                <div class="subject-card">
-                    <h3>English & Language Arts</h3>
-                    <p>Develop your language and writing skills with help in:</p>
-                    <ul>
-                        <li>Reading Comprehension</li>
-                        <li>Essay Writing</li>
-                        <li>Grammar & Vocabulary</li>
-                        <li>Literature Analysis</li>
-                    </ul>
-                </div>
-                <div class="subject-card">
-                    <h3>History & Social Studies</h3>
-                    <p>Expert tutoring in:</p>
-                    <ul>
-                        <li>World History</li>
-                        <li>U.S. History</li>
-                        <li>Government & Economics</li>
-                        <li>Research Paper Support</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Pricing Section -->
-    <section id="pricing-section" class="section page-section">
-        <div class="container">
-            <h2>Tutoring Packages & Pricing</h2>
-            <p>Choose the tutoring package that best fits your academic needs and goals.</p>
-            
-            <div class="subjects">
-                <div class="subject-card">
-                    <h3>Basic</h3>
-                    <div style="font-size: 2rem; font-weight: bold; color: var(--primary); margin: 1rem 0;">R40.00 <span style="font-size: 1rem;">/ hour</span></div>
-                    <ul>
-                        <li>One-on-one tutoring sessions</li>
-                        <li>Subject-specific help</li>
-                        <li>Homework assistance</li>
-                        <li>Basic progress tracking</li>
-                        <li>Pay as you go</li>
-                    </ul>
-                    <a href="#" class="btn" data-section="contact">Get Started</a>
-                </div>
-                
-                <div class="subject-card">
-                    <h3>Standard</h3>
-                    <div style="font-size: 2rem; font-weight: bold; color: var(--primary); margin: 1rem 0;">R35.00 <span style="font-size: 1rem;">/ hour</span></div>
-                    <ul>
-                        <li>4 sessions per month</li>
-                        <li>Customized learning plan</li>
-                        <li>Digital resources library</li>
-                        <li>Email support between sessions</li>
-                        <li>Monthly progress reports</li>
-                    </ul>
-                    <a href="#" class="btn" data-section="contact">Get Started</a>
-                </div>
-                
-                <div class="subject-card">
-                    <h3>Premium</h3>
-                    <div style="font-size: 2rem; font-weight: bold; color: var(--primary); margin: 1rem 0;">R30.00 <span style="font-size: 1rem;">/ hour</span></div>
-                    <ul>
-                        <li>8 sessions per month</li>
-                        <li>Comprehensive learning plan</li>
-                        <li>Priority scheduling</li>
-                        <li>24/7 question support</li>
-                        <li>Practice tests & materials</li>
-                        <li>Detailed progress analytics</li>
-                    </ul>
-                    <a href="#" class="btn" data-section="contact">Get Started</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact-section" class="section page-section">
-        <div class="container">
-            <h2>Contact Us</h2>
-            <p>Have questions or ready to get started? Reach out to us using the form below.</p>
-            
+    <!-- Login Section -->
+    <section id="login-section" class="section page-section">
+        <div class="container" style="max-width: 500px;">
             <div class="card">
-                <form id="contact-form">
-                    <div class="form-group">
-                        <label for="contact-name">Your Name</label>
-                        <input type="text" id="contact-name" class="form-control" required readonly>
+                <h2>Login or Sign Up</h2>
+                <p>Use your Google or Microsoft account to continue.</p>
+                <div class="login-btn-group">
+                    <button id="google-login-btn" class="btn auth-btn">Sign in with Google</button>
+                    <button id="microsoft-login-btn" class="btn auth-btn" style="background-color: #2f2f2f;">Sign in with Microsoft</button>
+                </div>
+                <div id="login-error" class="alert alert-danger" style="display: none; margin-top: 1rem;"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services-section" class="section page-section">
+        <div class="container"><h2>Our Services</h2><p>We offer tutoring in Math, Science, English, and more.</p></div>
+    </section>
+
+    <!-- Bookings Section (Student) -->
+    <section id="bookings-section" class="section page-section">
+        <div class="container">
+            <div class="card">
+                <h2>Book a Tutoring Session</h2>
+                <div id="booking-error" class="alert alert-danger" style="display: none;"></div>
+                <div id="booking-success" class="success-message"></div>
+                <div id="available-slots-container">
+                    <h3>Available Slots</h3>
+                    <div id="slots-list">
+                        <p>Loading available slots...</p>
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="contact-email">Email Address</label>
-                        <input type="email" id="contact-email" class="form-control" required readonly>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="contact-phone">Phone Number (Optional)</label>
-                        <input type="tel" id="contact-phone" class="form-control">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="contact-subject">Subject of Interest</label>
-                        <select id="contact-subject" class="form-control" required>
-                            <option value="">Select a subject</option>
-                            <option value="math">Mathematics</option>
-                            <option value="science">Science</option>
-                            <option value="english">English</option>
-                            <option value="history">History</option>
-                            <option value="test-prep">Test Prep</option>
-                            <option value="study-skills">Study Skills</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="contact-message">Your Message</label>
-                        <textarea id="contact-message" class="form-control" required></textarea>
-                    </div>
-                    
-                    <button type="submit" class="btn">Send Message</button>
-                </form>
-                
-                <div class="success-message" id="contact-success">
-                    Thank you for your message! We'll get back to you within 24 hours.
+                </div>
+                <hr>
+                <h3>Your Bookings</h3>
+                <div id="my-bookings-list">
+                    <p>Loading your bookings...</p>
                 </div>
             </div>
         </div>
     </section>
-       <section id="testimonials-section" class="page-section">
-            <div class="container">
-                <h2>What Our Students Say</h2>
-                <div id="testimonials-list" class="row">
-                    <p style="width: 100%; text-align: center;" id="no-testimonials-message">No testimonials yet. Be the first to add one!</p>
-                </div>
 
-                <hr style="margin: 3rem auto; width: 50%;">
-
-                <h3 style="text-align: center; margin-bottom: 1.5rem; color: var(--secondary);" id="testimonial-form-heading">Share Your Experience</h3>
-                <form id="testimonial-form" style="display: none;">
-                    <label for="testimonial-rating">Rating (1-5 Stars):</label>
-                    <input type="number" id="testimonial-rating" min="1" max="5" required>
-
-                    <label for="testimonial-message">Your Message:</label>
-                    <textarea id="testimonial-message" rows="5" required></textarea>
-
-                    <div id="testimonial-success" class="message-box success-message" style="display: none;">
-                        Thank you for your feedback!
-                    </div>
-                    <div id="testimonial-error" class="message-box error-message" style="display: none;">
-                        An error occurred while submitting your testimonial.
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit Testimonial</button>
-                </form>
-            </div>
-        </section>
-
-   <!-- Footer -->
-    <footer>
+    <!-- Admin Panel -->
+    <section id="admin-section" class="section page-section">
         <div class="container">
-            <p>&copy; <span id="current-year"></span> Simbela Tutoring Services. All rights reserved.</p>
+            <div class="card">
+                <h2>Admin Panel</h2>
+                <div class="card">
+                    <h3>Create New Mentorship Slot</h3>
+                    <form id="create-slot-form">
+                        <div class="form-group"><label for="slot-subject">Subject</label><input type="text" id="slot-subject" class="form-control" required></div>
+                        <div class="form-group"><label for="slot-date">Date</label><input type="date" id="slot-date" class="form-control" required></div>
+                        <div class="form-group"><label for="slot-time">Time</label><input type="time" id="slot-time" class="form-control" required></div>
+                        <div class="form-group"><label for="slot-capacity">Capacity</label><input type="number" id="slot-capacity" class="form-control" min="1" value="5" required></div>
+                        <button type="submit" class="btn btn-success">Create Slot</button>
+                    </form>
+                    <div id="slot-success" class="success-message"></div>
+                </div>
+                <div class="card">
+                    <h3>All Bookings (Pending Approval)</h3>
+                    <div id="admin-bookings-list"><p>Loading pending bookings...</p></div>
+                </div>
+            </div>
         </div>
+    </section>
+    
+    <!-- Questions Section (Admin) -->
+    <section id="questions-section" class="section page-section">
+        <div class="container">
+            <div class="card">
+                <h2>Student Questions</h2>
+                <div id="questions-list"><p>Loading questions...</p></div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container"><p>© <span id="current-year"></span> Simbela Tutoring Services</p></div>
     </footer>
 
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+    <!-- Your App Logic -->
     <script src="main.js"></script>
 </body>
 </html>
