@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentorship Slot Application</title>
+    <style>
+        /* --- General Styles & Variables --- */
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--light-color);
+            margin: 0;
+            color: var(--dark-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 960px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* --- Login Screen --- */
+        #login-container {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        #login-container h1 {
+            margin-bottom: 30px;
+        }
+
+        .login-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 320px;
+            margin: 15px auto;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .login-btn:hover {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .login-btn img {
+            width: 24px;
+            height: 24px;
+            margin-right: 15px;
+        }
+
+        .google-btn {
+            background-color: #4285F4;
+            color: white;
+        }
+
+        .microsoft-btn {
+            background-color: #2F2F2F;
+            color: white;
+        }
+
+        /* --- Main Application --- */
+        #app-container {
+            display: none; /* Initially hidden */
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: white;
+            padding: 15px 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 30px;
+        }
+
+        #user-info {
+            font-weight: 500;
+        }
+
+        #user-info span {
+            font-weight: 300;
+            color: var(--secondary-color);
+        }
+
+        #logout-btn {
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        /* --- Slot Card Styling --- */
+        .slot-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 20px;
+            padding: 20px;
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .slot-card.is-full {
+            border-left-color: var(--danger-color);
+            opacity: 0.7;
+        }
+
+        .slot-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .slot-header h3 {
+            margin: 0;
+            color: var(--primary-color);
+        }
+
+        .slot-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .detail-item {
+            font-size: 15px;
+        }
+        .detail-item strong {
+            display: block;
+            color: var(--secondary-color);
+            font-size: 13px;
+            margin-bottom: 2px;
+        }
+
+        /* --- Status & Action Buttons --- */
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-weight: 500;
+            font-size: 14px;
+            color: white;
+        }
+
+        .status-approved { background-color: var(--success-color); }
+        .status-pending { background-color: var(--warning-color); color: var(--dark-color); }
+        .status-full { background-color: var(--danger-color); }
+        .status-available { background-color: var(--primary-color); }
+
+        .action-btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 15px;
+            cursor: pointer;
+            background-color: var(--success-color);
+            color: white;
+            transition: background-color 0.2s;
+        }
+        
+        .action-btn:hover {
+            opacity: 0.9;
+        }
+
+        .action-btn:disabled {
+            background-color: var(--secondary-color);
+            cursor: not-allowed;
+        }
+        
+        .requested-msg {
+            color: var(--success-color);
+            font-weight: 500;
+        }
+
+        /* --- Teacher View Specifics --- */
+        .requests-section {
+            margin-top: 15px;
+        }
+
+        .requests-section h4 {
+            margin-bottom: 10px;
+            color: var(--secondary-color);
+        }
+
+        .request-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .request-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--light-color);
+            padding: 10px 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 8px;
+        }
+        
+        .approve-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 5px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .approve-btn:disabled {
+            background-color: var(--secondary-color);
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Login View -->
+        <div id="login-container">
+            <h1>Mentorship Application</h1>
+            <p>Please sign in to continue.</p>
+            <div class="disclaimer" style="font-size: 13px; color: #666; margin: 20px 0; padding: 10px; background: #f0f0f0; border-radius: 5px;">
+                <strong>This is a demo.</strong> Your login is simulated. No real Google or Microsoft authentication is performed.
+            </div>
+            <button class="login-btn google-btn" onclick="login('google')">
+                <img src="https://www.vectorlogo.zone/logos/google/google-icon.svg" alt="Google logo">
+                Sign in with Google
+            </button>
+            <button class="login-btn microsoft-btn" onclick="login('microsoft')">
+                <img src="https://www.vectorlogo.zone/logos/microsoft/microsoft-icon.svg" alt="Microsoft logo">
+                Sign in with Microsoft
+            </button>
+        </div>
+
+        <!-- Main Application View -->
+        <div id="app-container">
+            <header>
+                <div id="user-info"></div>
+                <button id="logout-btn" onclick="logout()">Logout</button>
+            </header>
+            <main id="main-content">
+                <!-- Content will be rendered here by JavaScript -->
+            </main>
+        </div>
+    </div>
+
+    <script>
+    // --- DATA SIMULATION ---
+    // In a real app, this data would come from a server database.
+    // We use localStorage to make it persist across browser sessions.
+
+    const initialData = {
+        slots: [
+            {
+                id: 1,
+                teacherEmail: 'e.reed@example.com',
+                teacherName: 'Dr. Evelyn Reed',
+                subject: 'Calculus I',
+                day: 'Monday',
+                time: '10:00 AM - 11:00 AM',
+                capacity: 3,
+                requests: [] // { studentEmail: '...', studentName: '...', status: 'pending' | 'approved' }
+            },
+            {
+                id: 2,
+                teacherEmail: 'e.reed@example.com',
+                teacherName: 'Dr. Evelyn Reed',
+                subject: 'Linear Algebra',
+                day: 'Wednesday',
+                time: '2:00 PM - 3:00 PM',
+                capacity: 2,
+                requests: []
+            },
+            {
+                id: 3,
+                teacherEmail: 'b.carter@example.com',
+                teacherName: 'Prof. Ben Carter',
+                subject: 'Physics: Mechanics',
+                day: 'Tuesday',
+                time: '11:00 AM - 12:00 PM',
+                capacity: 4,
+                requests: []
+            },
+            {
+                id: 4,
+                teacherEmail: 'b.carter@example.com',
+                teacherName: 'Prof. Ben Carter',
+                subject: 'Intro to Programming (Python)',
+                day: 'Friday',
+                time: '3:00 PM - 4:30 PM',
+                capacity: 5,
+                requests: [
+                    { studentEmail: 'pre-approved@example.com', studentName: 'Pat Approved', status: 'approved' },
+                    { studentEmail: 'pre-pending@example.com', studentName: 'Casey Pending', status: 'pending' }
+                ]
+            }
+        ]
+    };
+
+    // --- APPLICATION LOGIC ---
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Check if user is already logged in
+        const user = JSON.parse(localStorage.getItem('mentorshipUser'));
+        if (user) {
+            showAppView(user);
+        } else {
+            showLoginView();
+        }
+
+        // Seed data if it doesn't exist
+        if (!localStorage.getItem('mentorshipData')) {
+            localStorage.setItem('mentorshipData', JSON.stringify(initialData));
+        }
+    });
+
+    function login(provider) {
+        // This is a FAKE login. A real app would use OAuth2.
+        const role = prompt("For this demo, please choose your role: 'student' or 'teacher'");
+        
+        if (role && (role.toLowerCase() === 'student' || role.toLowerCase() === 'teacher')) {
+            const userRole = role.toLowerCase();
+            let user;
+            if (userRole === 'student') {
+                user = { 
+                    name: 'Alex Student', 
+                    email: `alex.${provider}@example.com`, 
+                    role: 'student' 
+                };
+            } else {
+                const teacherEmail = prompt("Enter teacher email for demo (e.g., e.reed@example.com or b.carter@example.com)");
+                const data = JSON.parse(localStorage.getItem('mentorshipData'));
+                const teacherData = data.slots.find(s => s.teacherEmail === teacherEmail);
+
+                if (!teacherData) {
+                    alert('Invalid teacher email. Please use one from the dataset.');
+                    return;
+                }
+
+                user = { 
+                    name: teacherData.teacherName, 
+                    email: teacherData.teacherEmail, 
+                    role: 'teacher' 
+                };
+            }
+            localStorage.setItem('mentorshipUser', JSON.stringify(user));
+            showAppView(user);
+        } else {
+            alert("Invalid role. Please enter 'student' or 'teacher'.");
+        }
+    }
+
+    function logout() {
+        localStorage.removeItem('mentorshipUser');
+        showLoginView();
+    }
+
+    function showLoginView() {
+        document.getElementById('login-container').style.display = 'block';
+        document.getElementById('app-container').style.display = 'none';
+    }
+
+    function showAppView(user) {
+        document.getElementById('login-container').style.display = 'none';
+        document.getElementById('app-container').style.display = 'block';
+        
+        const userInfoEl = document.getElementById('user-info');
+        userInfoEl.innerHTML = `Welcome, <strong>${user.name}</strong> <span>(${user.role})</span>`;
+
+        renderMainContent(user);
+    }
+
+    function renderMainContent(user) {
+        if (user.role === 'student') {
+            renderStudentView(user);
+        } else if (user.role === 'teacher') {
+            renderTeacherView(user);
+        }
+    }
+
+    // --- STUDENT VIEW ---
+    function renderStudentView(user) {
+        const data = JSON.parse(localStorage.getItem('mentorshipData'));
+        const mainContent = document.getElementById('main-content');
+        let html = '<h2>Available Mentorship Slots</h2>';
+
+        if (data.slots.length === 0) {
+            html += '<p>No mentorship slots are available at this time.</p>';
+        } else {
+            data.slots.forEach(slot => {
+                const approvedCount = slot.requests.filter(r => r.status === 'approved').length;
+                const isFull = approvedCount >= slot.capacity;
+                const userHasRequested = slot.requests.some(r => r.studentEmail === user.email);
+                
+                let actionHtml = '';
+                if (isFull) {
+                    actionHtml = '<span class="status-badge status-full">Slot Full</span>';
+                } else if (userHasRequested) {
+                    actionHtml = '<p class="requested-msg">✔ Request Sent</p>';
+                } else {
+                    actionHtml = `<button class="action-btn" onclick="requestSlot(${slot.id})">Request Slot</button>`;
+                }
+
+                html += `
+                    <div class="slot-card ${isFull ? 'is-full' : ''}">
+                        <div class="slot-header">
+                            <h3>${slot.subject}</h3>
+                            <div class="slot-action">
+                                ${actionHtml}
+                            </div>
+                        </div>
+                        <div class="slot-details">
+                            <div class="detail-item"><strong>TUTOR</strong> ${slot.teacherName}</div>
+                            <div class="detail-item"><strong>DAY</strong> ${slot.day}</div>
+                            <div class="detail-item"><strong>TIME</strong> ${slot.time}</div>
+                            <div class="detail-item"><strong>CAPACITY</strong> ${approvedCount} / ${slot.capacity} Approved</div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        mainContent.innerHTML = html;
+    }
+    
+    function requestSlot(slotId) {
+        const user = JSON.parse(localStorage.getItem('mentorshipUser'));
+        const data = JSON.parse(localStorage.getItem('mentorshipData'));
+
+        const slot = data.slots.find(s => s.id === slotId);
+        if (slot) {
+            slot.requests.push({
+                studentEmail: user.email,
+                studentName: user.name,
+                status: 'pending'
+            });
+            localStorage.setItem('mentorshipData', JSON.stringify(data));
+            renderStudentView(user); // Re-render the view
+        }
+    }
+
+
+    // --- TEACHER VIEW ---
+    function renderTeacherView(user) {
+        const data = JSON.parse(localStorage.getItem('mentorshipData'));
+        const mainContent = document.getElementById('main-content');
+        const teacherSlots = data.slots.filter(s => s.teacherEmail === user.email);
+
+        let html = '<h2>Your Mentorship Slots</h2>';
+
+        if (teacherSlots.length === 0) {
+            html += '<p>You have not been assigned any mentorship slots.</p>';
+        } else {
+            teacherSlots.forEach(slot => {
+                const approvedCount = slot.requests.filter(r => r.status === 'approved').length;
+                const isFull = approvedCount >= slot.capacity;
+
+                const pendingRequests = slot.requests.filter(r => r.status === 'pending');
+                const approvedRequests = slot.requests.filter(r => r.status === 'approved');
+
+                html += `
+                    <div class="slot-card ${isFull ? 'is-full' : ''}">
+                        <div class="slot-header">
+                            <h3>${slot.subject}</h3>
+                            <span class="status-badge ${isFull ? 'status-full' : 'status-available'}">
+                                ${isFull ? 'Full' : `${approvedCount} / ${slot.capacity} Filled`}
+                            </span>
+                        </div>
+                        <div class="slot-details">
+                           <div class="detail-item"><strong>DAY</strong> ${slot.day}</div>
+                           <div class="detail-item"><strong>TIME</strong> ${slot.time}</div>
+                        </div>
+                        
+                        <div class="requests-section">
+                            <h4>Pending Requests (${pendingRequests.length})</h4>
+                            ${renderRequestList(pendingRequests, slot.id, 'pending', isFull)}
+                        </div>
+
+                        <div class="requests-section">
+                            <h4>Approved Students (${approvedRequests.length})</h4>
+                            ${renderRequestList(approvedRequests, slot.id, 'approved')}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        mainContent.innerHTML = html;
+    }
+    
+    function renderRequestList(requests, slotId, type, isSlotFull = false) {
+        if (requests.length === 0) {
+            return `<p>No ${type} requests.</p>`;
+        }
+        
+        let listHtml = '<ul class="request-list">';
+        requests.forEach(req => {
+            let actionButton = '';
+            if (type === 'pending') {
+                actionButton = `<button class="approve-btn" onclick="approveRequest(${slotId}, '${req.studentEmail}')" ${isSlotFull ? 'disabled' : ''}>Approve</button>`;
+            }
+
+            listHtml += `
+                <li class="request-item">
+                    <span>${req.studentName} (${req.studentEmail})</span>
+                    ${actionButton}
+                </li>
+            `;
+        });
+        listHtml += '</ul>';
+        return listHtml;
+    }
+
+    function approveRequest(slotId, studentEmail) {
+        const user = JSON.parse(localStorage.getItem('mentorshipUser'));
+        const data = JSON.parse(localStorage.getItem('mentorshipData'));
+
+        const slot = data.slots.find(s => s.id === slotId);
+        if (slot) {
+            const request = slot.requests.find(r => r.studentEmail === studentEmail);
+            if (request) {
+                request.status = 'approved';
+                localStorage.setItem('mentorshipData', JSON.stringify(data));
+                renderTeacherView(user); // Re-render the view
+            }
+        }
+    }
+
+    </script>
+</body>
+</html>
