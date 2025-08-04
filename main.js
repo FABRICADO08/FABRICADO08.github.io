@@ -229,7 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
         apiKey: "AIzaSyCgc8xXVs1_DNhKMoUx0kiZnzoL8nIsStM",
         authDomain: "mentorship-5ce42.firebaseapp.com",
         projectId: "mentorship-5ce42",
-        storageBucket: "mentorship-5ce42.firebase-app.com",
+        storageBucket: "mentorship-5ce42.firebaseapp.com",
         messagingSenderId: "764728773969",
         appId: "1:764728773969:web:1ade331d0ce736efe19770",
         measurementId: "G-PDKKVLP6L6"
@@ -401,7 +401,7 @@ document.addEventListener('DOMContentLoaded', () => {
             myTestimonialsHtml = myTestimonials.map(t => `
                 <div class="testimonial-item">
                     <p>"${t.testimonialText}"</p>
-                    <small>Status: ${t.status.charAt(0).toUpperCase() + t.status.slice(1)}</small>
+                    <small>Submitted on: ${new Date(t.createdAt.toDate()).toLocaleDateString()}</small>
                 </div>
             `).join('');
         }
@@ -483,12 +483,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span class="status-badge status-pending" style="background-color: var(--light-yellow); color: var(--warning); padding: 5px 10px; border-radius: 4px; font-size: 12px; font-weight: 500;">Pending</span>
                     </div>
                     <p style="margin-top: 0; margin-bottom: 15px;">
-                        Requested to book a slot for <strong>${req.subjectName}</strong> on 
+                        Requested to book a slot for <strong>${req.subjectName}</strong> on
                         <strong>${formatDateTime(req.slotDate, req.slotTime)}</strong>.
                     </p>
                     <div class="request-actions" style="display: flex; gap: 10px;">
-                        <button onclick="app.updateBookingStatus('${req.id}', 'confirmed', '${user.uid}')" class="btn-approve" style="padding: 8px 16px; border-radius: 6px; border: none; font-weight: 600; cursor: pointer; background-color: var(--success); color: white;">Approve</button>
-                        <button onclick="app.updateBookingStatus('${req.id}', 'declined', '${user.uid}')" class="btn-decline" style="padding: 8px 16px; border-radius: 6px; border: none; font-weight: 600; cursor: pointer; background-color: var(--danger); color: white;">Decline</button>
+                        <button onclick="app.updateBookingStatus('${req.id}', 'confirmed')" class="btn-approve" style="padding: 8px 16px; border-radius: 6px; border: none; font-weight: 600; cursor: pointer; background-color: var(--success); color: white;">Approve</button>
+                        <button onclick="app.updateBookingStatus('${req.id}', 'declined')" class="btn-decline" style="padding: 8px 16px; border-radius: 6px; border: none; font-weight: 600; cursor: pointer; background-color: var(--danger); color: white;">Decline</button>
                     </div>
                 </div>
             `).join('');
@@ -530,15 +530,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Fetch all testimonials for Admin review
-        const allTestimonialsSnapshot = await db.collection('testimonials').get();
+        // Fetch all testimonials (for display by Admin, as no approval needed)
+        const allTestimonialsSnapshot = await db.collection('testimonials').orderBy('createdAt', 'desc').get();
         const allTestimonials = allTestimonialsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-        let testimonialsForReviewHtml = '';
+        let testimonialsDisplayHtml = '';
         if (allTestimonials.length === 0) {
-            testimonialsForReviewHtml = '<p>No testimonials to review.</p>';
+            testimonialsDisplayHtml = '<p>No testimonials available yet.</p>';
         } else {
-            testimonialsForReviewHtml = allTestimonials.map(t => `
+            testimonialsDisplayHtml = allTestimonials.map(t => `
                 <div class="request-card" style="margin-bottom: 15px; border: 1px solid var(--border-color); padding: 15px; border-radius: var(--border-radius);">
                     <div class="request-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                         <div class="student-info" style="display: flex; align-items: center; gap: 10px;">
@@ -548,17 +548,12 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <span style="font-size: 13px; color: var(--text-light);">Student</span>
                             </div>
                         </div>
-                        <span class="status-badge" style="background-color: ${t.status === 'approved' ? 'var(--light-green)' : t.status === 'pending' ? 'var(--light-yellow)' : 'var(--light-red)'}; color: ${t.status === 'approved' ? 'var(--success)' : t.status === 'pending' ? 'var(--warning)' : 'var(--danger)'}; padding: 5px 10px; border-radius: 4px; font-size: 12px; font-weight: 500;">${t.status.charAt(0).toUpperCase() + t.status.slice(1)}</span>
+                        <span style="font-size: 13px; color: var(--text-light);">${new Date(t.createdAt.toDate()).toLocaleDateString()}</span>
                     </div>
-                    <p style="margin-top: 0; margin-bottom: 15px;">"${t.testimonialText}"</p>
-                    <div class="request-actions" style="display: flex; gap: 10px;">
-                        ${t.status !== 'approved' ? `<button onclick="app.approveTestimonial('${t.id}', '${user.uid}')" class="btn-approve" style="padding: 8px 16px; border-radius: 6px; border: none; font-weight: 600; cursor: pointer; background-color: var(--success); color: white;">Approve</button>` : ''}
-                        ${t.status !== 'rejected' ? `<button onclick="app.rejectTestimonial('${t.id}', '${user.uid}')" class="btn-decline" style="padding: 8px 16px; border-radius: 6px; border: none; font-weight: 600; cursor: pointer; background-color: var(--danger); color: white;">Reject</button>` : ''}
-                    </div>
+                    <p style="margin-top: 0; margin-bottom: 0;">"${t.testimonialText}"</p>
                 </div>
             `).join('');
         }
-
 
         mainContent.innerHTML = `
             <div class="welcome-header"><h1 id="teacher-welcome-name">Welcome, ${user.displayName}!</h1><p>Manage your mentorship slots and student requests.</p></div>
@@ -569,7 +564,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="stat-card"><div class="stat-card-info"><h3>${pendingRequests.length}</h3><p>Pending Requests</p></div><div class="stat-card-icon icon-yellow">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 </div></div>
-                <div class="stat-card"><div class="stat-card-info"><h3>${allTestimonials.filter(t => t.status === 'pending').length}</h3><p>Testimonials to Review</p></div><div class="stat-card-icon icon-purple">
+                <div class="stat-card"><div class="stat-card-info"><h3>${allTestimonials.length}</h3><p>Total Testimonials</p></div><div class="stat-card-icon icon-purple">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                 </div></div>
             </section>
@@ -652,8 +647,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="sidebar-column">
                     <div class="card" style="margin-bottom: 32px;">
-                        <div class="section-header" style="margin-bottom: 20px;"><h2>Testimonials for Review</h2></div>
-                        <div id="testimonials-review-list">${testimonialsForReviewHtml}</div>
+                        <div class="section-header" style="margin-bottom: 20px;"><h2>Student Testimonials</h2></div>
+                        <div id="testimonials-display-list">${testimonialsDisplayHtml}</div>
                     </div>
                 </div>
             </section>
@@ -713,11 +708,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         },
 
-        updateBookingStatus: async (bookingId, newStatus, teacherUid) => {
-            if (!auth.currentUser || auth.currentUser.uid !== teacherUid) {
+        updateBookingStatus: async (bookingId, newStatus) => { // Removed teacherUid as it's not strictly needed for this simple update
+            if (!auth.currentUser) {
+                alert('You must be logged in to perform this action.');
+                return;
+            }
+            // Add a check to ensure the current user is indeed a teacher if this function is only for teachers
+            const userDoc = await db.collection('users').doc(auth.currentUser.uid).get();
+            if (!userDoc.exists || userDoc.data().role !== 'teacher') {
                 alert('You are not authorized to perform this action.');
                 return;
             }
+
             try {
                 await db.collection('bookings').doc(bookingId).update({ status: newStatus });
                 alert(`Booking ${newStatus}!`);
@@ -732,6 +734,13 @@ document.addEventListener('DOMContentLoaded', () => {
             event.preventDefault();
             if (!auth.currentUser) return alert('You must be logged in.');
             const user = auth.currentUser;
+            // Add a check to ensure the current user is indeed a teacher
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            if (!userDoc.exists || userDoc.data().role !== 'teacher') {
+                alert('You are not authorized to perform this action.');
+                return;
+            }
+
             const subjectName = document.getElementById('subject-name').value.trim();
             const pricePerMinute = parseFloat(document.getElementById('subject-price-per-minute').value);
 
@@ -757,8 +766,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         },
 
-        deleteSubject: async (subjectId, teacherUid) => {
-            if (!auth.currentUser || auth.currentUser.uid !== teacherUid) {
+        deleteSubject: async (subjectId) => { // Removed teacherUid from params, will check current user
+            if (!auth.currentUser) {
+                alert('You must be logged in to perform this action.');
+                return;
+            }
+            // Add a check to ensure the current user is indeed a teacher
+            const userDoc = await db.collection('users').doc(auth.currentUser.uid).get();
+            if (!userDoc.exists || userDoc.data().role !== 'teacher') {
                 alert('You are not authorized to perform this action.');
                 return;
             }
@@ -789,6 +804,12 @@ document.addEventListener('DOMContentLoaded', () => {
             event.preventDefault();
             if (!auth.currentUser) return alert('You must be logged in.');
             const user = auth.currentUser;
+            // Add a check to ensure the current user is indeed a teacher
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            if (!userDoc.exists || userDoc.data().role !== 'teacher') {
+                alert('You are not authorized to perform this action.');
+                return;
+            }
 
             const subjectId = document.getElementById('slot-subject').value;
             const slotDate = document.getElementById('slot-date').value;
@@ -832,8 +853,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         },
 
-        cancelSlot: async (slotId, teacherUid) => {
-            if (!auth.currentUser || auth.currentUser.uid !== teacherUid) {
+        cancelSlot: async (slotId) => { // Removed teacherUid from params, will check current user
+            if (!auth.currentUser) {
+                alert('You must be logged in to perform this action.');
+                return;
+            }
+            // Add a check to ensure the current user is indeed a teacher
+            const userDoc = await db.collection('users').doc(auth.currentUser.uid).get();
+            if (!userDoc.exists || userDoc.data().role !== 'teacher') {
                 alert('You are not authorized to perform this action.');
                 return;
             }
@@ -883,46 +910,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     userId: user.uid,
                     userName: user.displayName,
                     testimonialText: testimonialText,
-                    status: 'pending', // Testimonials require admin approval
+                    // No 'status: pending' anymore, as it's not needed for approval
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
-                alert('Testimonial submitted for review!');
+                alert('Testimonial submitted successfully!');
                 document.getElementById('testimonial-text').value = ''; // Clear text area
-                renderStudentContent(user); // Refresh to show their pending testimonial
+                renderStudentContent(user); // Refresh to show their new testimonial
             } catch (error) {
                 console.error("Error submitting testimonial:", error);
                 alert('Failed to submit testimonial. Please try again.');
             }
         },
-
-        approveTestimonial: async (testimonialId, teacherUid) => {
-            if (!auth.currentUser || auth.currentUser.uid !== teacherUid) {
-                alert('You are not authorized to perform this action.');
-                return;
-            }
-            try {
-                await db.collection('testimonials').doc(testimonialId).update({ status: 'approved' });
-                alert('Testimonial approved!');
-                renderTeacherContent(auth.currentUser); // Refresh the dashboard
-            } catch (error) {
-                console.error("Error approving testimonial:", error);
-                alert('Failed to approve testimonial.');
-            }
-        },
-
-        rejectTestimonial: async (testimonialId, teacherUid) => {
-            if (!auth.currentUser || auth.currentUser.uid !== teacherUid) {
-                alert('You are not authorized to perform this action.');
-                return;
-            }
-            try {
-                await db.collection('testimonials').doc(testimonialId).update({ status: 'rejected' });
-                alert('Testimonial rejected!');
-                renderTeacherContent(auth.currentUser); // Refresh the dashboard
-            } catch (error) {
-                console.error("Error rejecting testimonial:", error);
-                alert('Failed to reject testimonial.');
-            }
-        }
+        // Removed approveTestimonial and rejectTestimonial functions
     };
 });
